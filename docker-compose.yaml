@@ -1,0 +1,44 @@
+version: "3.1"
+
+#
+# https://hub.docker.com/_/postgres
+#
+
+services:
+  db:
+    image: postgres:13.3
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: abacaxi@
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+    networks:
+      - spark-net
+
+#
+# https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
+# https://github.com/postgres/pgadmin4/blob/master/Dockerfile
+#
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: rogermm@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: PgAdmin2018!
+    ports:
+      - 15432:80
+    depends_on:
+      - db
+    volumes:
+      - pgadmin_db:/var/lib/pgadmin
+    networks:
+      - spark-net
+
+volumes:
+  postgres_db:
+  pgadmin_db:
+
+networks:
+  spark-net:
+    external:
+      name: spark-net
