@@ -23,16 +23,18 @@ services:
     image: dpage/pgadmin4
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: rogermm@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: PgAdmin2018!
-    ports:
-      - 15432:80
+      PGADMIN_DEFAULT_EMAIL: pgadmin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: pgadmin
     depends_on:
       - db
     volumes:
       - pgadmin_db:/var/lib/pgadmin
     networks:
       - spark-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.bdb`)"
+      - "traefik.http.routers.pgadmin.entrypoints=web"
 
 volumes:
   postgres_db:
